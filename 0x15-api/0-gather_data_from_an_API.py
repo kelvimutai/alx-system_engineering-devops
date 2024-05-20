@@ -1,26 +1,31 @@
 #!/usr/bin/python3
-"""Returns to-do list information for a given employee ID."""
+
 
 import requests
 import sys
 
-if __name__ == "__main__":
-    """
-    Main function of the script.
-    Retrieves employee information and to-do list information using the
-    REST API, and prints the to-do list progress for the employee.
-    """
 
-    # Base URL for the API endpoints
-    url = "https://jsonplaceholder.typicode.com/"
-    # Endpoint to get employee info
-    user = requests.get(url + "users/{}".format(sys.argv[1])).json()
-    # Endpoint to get todo list for the employee
-    todos = requests.get(url + "todos", params={"userId": sys.argv[1]}).json()
+if __name__ == '__main__':
+    employeeId = sys.argv[1]
+    baseUrl = "https://jsonplaceholder.typicode.com/users"
+    url = baseUrl + "/" + employeeId
 
-    # Filter completed tasks
-    completed = [t.get("title") for t in todos if t.get("completed") is True]
-    # Print employee TODO list progress
-    print("Employee {} is done with tasks({}/{}):".format(
-        user.get("name"), len(completed), len(todos)))
-    [print("\t {}".format(c)) for c in completed]
+    response = requests.get(url)
+    employeeName = response.json().get('name')
+
+    todoUrl = url + "/todos"
+    response = requests.get(todoUrl)
+    tasks = response.json()
+    done = 0
+    done_tasks = []
+
+    for task in tasks:
+        if task.get('completed'):
+            done_tasks.append(task)
+            done += 1
+
+    print("Employee {} is done with tasks({}/{}):"
+          .format(employeeName, done, len(tasks)))
+
+    for task in done_tasks:
+        print("\t {}".format(task.get('title')))
