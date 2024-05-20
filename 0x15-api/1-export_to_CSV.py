@@ -2,8 +2,8 @@
 """Exports to-do list information for a given employee ID to CSV format."""
 
 # Import the csv module for working with CSV files
-# Import the requests module for making HTTP requests
-# Import the sys module for accessing command line arguments
+# Import the requests module for making HTTP requests. Get, Put ,Post
+# Import the sys module for accessing command-line arguments..
 import csv
 import requests
 import sys
@@ -29,3 +29,4 @@ if __name__ == "__main__":
         [writer.writerow(
             [user_id, username, t.get("completed"), t.get("title")])
          for t in todos]
+# Done!!!
